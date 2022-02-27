@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
@@ -87,17 +88,19 @@ export default function Home( { data }) {
             const { id, name, image, status } = result;
             return (
               <li key={id} className={styles.card}>
-                <a href="#" className={styles.linkContainer} >
-                  <p 
-                  className={styles.status} 
-                  style={status === "Alive" ? {backgroundColor : "#2b9348"} 
-                  : status === "Dead" ? {backgroundColor : "#e5383b"}
-                  : {backgroundColor : "#5829a7"}}>
-                    {status}
-                  </p>
-                  <img src={image} alt={`${name} Thumbnail`} />
-                  <h3>{ name }</h3>
-                </a>
+                <Link href="/character/[id]" as={`/character/${id}`} >
+                  <a className={styles.linkContainer}>
+                    <p 
+                    className={styles.status} 
+                    style={status === "Alive" ? {backgroundColor : "#2b9348"} 
+                    : status === "Dead" ? {backgroundColor : "#e5383b"}
+                    : {backgroundColor : "#5829a7"}}>
+                      {status}
+                    </p>
+                    <img src={image} alt={`${name} Thumbnail`} />
+                    <h3>{ name }</h3>
+                  </a>
+                </Link>
               </li>
             )
           })}

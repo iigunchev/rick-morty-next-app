@@ -134,3 +134,42 @@
   color: white;
   font-size: 1rem !important;
 }
+
+.profile {
+  display: flex;
+  margin-top: 2em;
+}
+
+@media (max-width: 600px) {
+  .profile {
+    flex-direction: column;
+  }
+}
+
+.profileImage {
+  margin-right: 2em;
+}
+.profileDetails {
+  padding: 0 0 0 1rem;
+}
+.profileDetails ul {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+@media (max-width: 600px) {
+  .profileImage {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .profileDetails {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
+
+.back a {
+  color: blue;
+  text-decoration: underline;
+}
