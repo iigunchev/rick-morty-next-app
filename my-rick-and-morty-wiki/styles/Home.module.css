@@ -121,3 +121,16 @@
     flex-direction: column;
   }
 }
+
+.linkContainer {
+  position: relative;
+}
+.status {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  border-radius: 8px;
+  padding: 0.1em 0.5em;
+  color: white;
+  font-size: 1rem !important;
+}

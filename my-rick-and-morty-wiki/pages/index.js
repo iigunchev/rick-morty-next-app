@@ -1,11 +1,12 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { useState, useEffect } from "react";
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
 
 const defaultEndpoint = `https://rickandmortyapi.com/api/character/`;
 
 export async function getServerSideProps() {
-  const res = await fetch(defaultEndpoint)
+  const res = await fetch(defaultEndpoint);
   const data = await res.json();
   return {
     props: {
@@ -16,9 +17,53 @@ export async function getServerSideProps() {
 
 
 export default function Home( { data }) {
-  console.log('data', data);
 
-  const { results = [] } = data;
+  const { info, results: defaultResults = [] } = data;
+  const [results, updateResults] = useState(defaultResults);
+  const [page, updatePage] = useState({
+    ...info,
+    current: defaultEndpoint
+  });
+  
+  const { current } = page;
+
+  useEffect(() => {
+    if ( current === defaultEndpoint ) return;
+
+    async function request() {
+      const res = await fetch(current)
+      const nextData = await res.json();
+
+      updatePage({
+        current,
+        ...nextData.info
+      });
+
+      if ( !nextData.info?.prev ) {
+        updateResults(nextData.results);
+        return;
+      }
+
+      updateResults(prev => {
+        return [
+          ...prev,
+          ...nextData.results
+        ]
+      });
+    }
+
+    request();
+  }, [current]);
+
+  function handleLoadMore() {
+    updatePage(prev => {
+      return {
+        ...prev,
+        current: page?.next
+      }
+    });
+  }
+  
 
   return (
     <div className={styles.container}>
@@ -39,10 +84,17 @@ export default function Home( { data }) {
 
         <ul className={styles.grid}>
           {results.map(result => {
-            const { id, name, image } = result;
+            const { id, name, image, status } = result;
             return (
               <li key={id} className={styles.card}>
-                <a href="#">
+                <a href="#" className={styles.linkContainer} >
+                  <p 
+                  className={styles.status} 
+                  style={status === "Alive" ? {backgroundColor : "#2b9348"} 
+                  : status === "Dead" ? {backgroundColor : "#e5383b"}
+                  : {backgroundColor : "#5829a7"}}>
+                    {status}
+                  </p>
                   <img src={image} alt={`${name} Thumbnail`} />
                   <h3>{ name }</h3>
                 </a>
@@ -50,6 +102,10 @@ export default function Home( { data }) {
             )
           })}
         </ul>
+        <p>
+          <button onClick={handleLoadMore}>Load More</button>
+        </p>
+
 
       </main>
 
