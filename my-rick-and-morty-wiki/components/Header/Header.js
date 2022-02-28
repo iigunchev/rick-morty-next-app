@@ -7,7 +7,7 @@ export default function Header() {
         <nav>
         <Link href="/">Home</Link>
         <Link href="/episodes">Episodes</Link>
-        <Link href="/">Locations</Link>
+        <Link href="/locations">Locations</Link>
         </nav>
     </header>
   )
