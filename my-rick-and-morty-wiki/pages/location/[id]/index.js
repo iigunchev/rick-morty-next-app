@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
-import Image from 'next/image';
 import styles from '../../../styles/Home.module.css';
 import Header from "../../../components/Header/Header"
 
-const defaultEndpoint = `https://rickandmortyapi.com/api/episode/`;
+const defaultEndpoint = `https://rickandmortyapi.com/api/location/`;
 
 export async function getServerSideProps( {query} ) {
   const { id } = query;
@@ -19,15 +18,13 @@ export async function getServerSideProps( {query} ) {
 }
 
 
-export default function Character( { data }) {
-  const { name, air_date, episode, characters } = data;
+export default function Location( { data }) {
+  const { name, id, type, dimension, residents } = data;
   const [charactersInfo, setCharactersInfo] = useState([]);
 
   useEffect(() => {
     async function fetchAll() {
-      const results = 
-      await Promise.all(characters.map((url) => fetch(url).then((r) => r.json())))
-      .then(data => setCharactersInfo(data));
+      const results = await Promise.all(residents.map((url) => fetch(url).then((r) => r.json()))).then(data => setCharactersInfo(data));
     }
     fetchAll();
   }, [])
@@ -47,34 +44,34 @@ export default function Character( { data }) {
         </h1>
         <div className={styles.profile}>
           <div className={styles.profileDetails}>
-            <h2>Episode Details</h2>
+            <h2>Location Details</h2>
             <ul>
               <li>
                 <strong>Name:</strong> { name }
               </li>
               <li>
-                <strong>Air Date:</strong> { air_date }
+                <strong>Type</strong> { type }
               </li>
               <li>
-                <strong>Season: </strong> { episode }
+                <strong>{ dimension } </strong> 
               </li>
             </ul>
           </div>
         </div>
         <p className={styles.back}>
-          <Link href="/episodes">
+          <Link href="/locations">
             <a>
-              Back to All Episodes
+              Back to All Locations
             </a>
           </Link>
         </p>
-        <h2>Characters</h2>
+        <h2>Residents</h2>
         <ul className={styles.grid}>
             {charactersInfo.map(result => {
               const { id, name, image, status } = result;
               return (
                 <li key={id} className={styles.card}>
-                  <Link href="/character/[id]" as={`/character/${id}`} >
+                  <Link href="/location/[id]" as={`/location/${id}`} >
                     <a className={styles.linkContainer}>
                       <p 
                       className={styles.status} 
